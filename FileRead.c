@@ -1,14 +1,18 @@
 #include "FileRead.h" 
 
+#define MAX_LINE_SIZE 9999
+
 void* file_read(DataBuffer* buffer) {
     char file_name[100];
     int i = -1;			//row, ignore row 1 text
     int j = 0;			//column
     char line[MAX_LINE_SIZE];
     char* result = NULL;
+    
     FILE* myfile;
 
     strcpy(file_name, "320data_3.csv");		//file name in vm tmp
+    
     myfile = fopen(file_name, "r");
     if (!myfile) {
         fprintf(stderr, "failed to open %s for reading\n", file_name);
@@ -19,7 +23,7 @@ void* file_read(DataBuffer* buffer) {
         result = strtok(line, ",");
         while (result != NULL) {
             if (i != -1) {
-                buffer->data[j] = atof(result);     
+                buffer->data[j] = atof(result);
             }
             j++;
             result = strtok(NULL, ",");
