@@ -1,4 +1,13 @@
-#include "FileRead.h" //contains thread functions
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include <sys/time.h>
+#include <pthread.h>
+#include <string.h>
+#include <semaphore.h>
+#include "FileRead.h" 
+
+#define _GNU_SOURCE
 
 #define MAX_LINE_SIZE 9999
 #define MAX_SHEET_SIZE 9999
@@ -32,7 +41,7 @@ static void task_body(void) {
 	current = tv.tv_sec * 1000;
 
 	if (cycles > 0) {
-		fprintf(stderr, "cycle im %f millisecons\n",
+		fprintf(stderr, "cycle im %f millisecons\n", 
 			(double)(current - start) / cycles);
 	}
 	cycles++;
@@ -106,7 +115,7 @@ void* threadProducer(Param* param) {
 	period = param->period;
 	filenum = param->filenum;
 	printf("producer thread %d creadted\n", filenum);
-
+	
 	while (1) {
 		if (command) {
 			// do nothing
@@ -133,6 +142,7 @@ void* threadProducer(Param* param) {
 
 			sem_post(&sem_cons);
 			delay(period);
+			
 		}
 	}
 }
