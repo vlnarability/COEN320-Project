@@ -15,7 +15,7 @@ void* file_read(DataBuffer* buffer) {
     
     myfile = fopen(file_name, "r");
     if (!myfile) {
-        fprintf(stderr, "failed to open %s for reading\n", file_name);
+        fprintf(stderr, "cannot open file %s \n", file_name);
         exit(-1);
     }
 
@@ -35,8 +35,8 @@ void* file_read(DataBuffer* buffer) {
         j = 0;  		//reset to the first column
         delay(1000);    //provide data every 1 second
     }
-    //close file
-    fclose(myfile);
+    
+    fclose(myfile);//close file read
 }
 
 
