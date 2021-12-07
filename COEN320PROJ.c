@@ -9,9 +9,6 @@
 
 #define _GNU_SOURCE
 
-#define MAX_LINE_SIZE 9999
-#define MAX_SHEET_SIZE 9999
-
 sem_t sem_cons;				//consumer semaphore
 int status;					//status for function calls
 int update[5];
@@ -41,7 +38,7 @@ static void task_body(void) {
 	current = tv.tv_sec * 1000;
 
 	if (cycles > 0) {
-		fprintf(stderr, "cycle im %f millisecons\n", 
+		fprintf(stderr, "cycle im %f millisecons\n",
 			(double)(current - start) / cycles);
 	}
 	cycles++;
@@ -57,7 +54,7 @@ int main(void)
 	sem_init(&sem_cons, 0, 1);		//set consumer semaphore 
 
 	for (itr = 0; itr < 5; itr++) {
-		p[itr] = malloc(sizeof(Param));
+		p[itr] = malloc(sizeof(Param));   //memory location
 		p[itr]->filenum = itr;
 	}
 
@@ -107,65 +104,21 @@ int main(void)
 
 }
 
-void* threadProducer(Param* param) {
-	int period;
-	int filenum;
-	struct timespec start, finish;
-	double elapsed;
-	period = param->period;
-	filenum = param->filenum;
-	printf("producer thread %d creadted\n", filenum);
-	
-	while (1) {
-		if (command) {
-			// do nothing
-		}
-		else if (state == T) {
-			sem_wait(&sem_cons);
-			gettimeofday(&tv, NULL);
-			printf("current time in second:%d\n", tv.tv_sec);
-
-			clock_gettime(CLOCK_MONOTONIC, &start);			//clock start
-
-			//if(command){// if user change frequency
-			period = frequency[filenum];
-			//}
-
-			data[filenum] = buf->data[filenum];
-			update[filenum] = 1;
-
-			printf("file: %d ,period: %d milliseconds \n", filenum + 1, period);
-
-			clock_gettime(CLOCK_MONOTONIC, &finish);//finish
-
-			elapsed = (finish.tv_sec - start.tv_sec);
-
-			sem_post(&sem_cons);
-			delay(period);
-			
-		}
+int getline(char* s, int lim) {
+	int c, i;
+	for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; i++)
+		s[i] = c;
+	if (c == '\n') {
+		s[i] = c;
+		++i;
 	}
+	s[i] = '\0';
+
+	return i;
+
 }
 
-void* threadConsumer() {
-	int itr;
-	printf("consumer start\n");
-	while (1) {
-		if (command) {
-			//do nothing
-		}
-		else {
-			for (itr = 0; itr < 5; itr++) {
-				if (update[itr] == 1) {
-					printf("senser read data: %.1f , from file %d .\n", data[itr], itr + 1);
-					update[itr] = 0;
-				}
-			}
-		}
 
-	}
-	return(NULL);
-}
 /*
 void* commandProcessor(int f_no){
 	int id = f_no;
@@ -201,6 +154,7 @@ void* commandProcessor(int f_no){
 	close_keyboard();
 }
 */
+
 void commandUpdate() {
 	char* temp;
 	char* buffer;
@@ -271,18 +225,68 @@ void commandUpdate() {
 
 }
 
-int getline(char* s, int lim) {
-	int c, i;
-	for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; i++)
-		s[i] = c;
-	if (c == '\n') {
-		s[i] = c;
-		++i;
+void* threadConsumer() {
+	int itr;
+	printf("consumer start\n");
+	while (1) {
+		if (command) {
+			//do nothing
+		}
+		else {
+			for (itr = 0; itr < 5; itr++) {
+				if (update[itr] == 1) {	
+					printf("senser read data: %.1f , from file %d .\n", data[itr], itr + 1); 
+					update[itr] = 0;
+				}
+			}
+		}
+
 	}
-	s[i] = '\0';
-
-	return i;
-
+	return(NULL);
 }
+
+void* threadProducer(Param* param) {
+	int period;
+	int filenum;
+	struct timespec start, finish;
+	double elapsed;
+	period = param->period;
+	filenum = param->filenum;
+	printf("producer thread %d creadted\n", filenum);
+
+	while (1) {
+		if (command) {
+			// do nothing
+		}
+		else if (state == T) {
+			sem_wait(&sem_cons);
+			gettimeofday(&tv, NULL);
+			printf("current time in second:%d\n", tv.tv_sec);
+
+			clock_gettime(CLOCK_MONOTONIC, &start);			//clock start
+
+			//if(command){// if user change frequency
+			period = frequency[filenum];
+			//}
+
+			data[filenum] = buf->data[filenum];
+			update[filenum] = 1;
+
+			printf("file: %d ,period: %d milliseconds \n", filenum + 1, period);
+
+			clock_gettime(CLOCK_MONOTONIC, &finish);//finish
+
+			elapsed = (finish.tv_sec - start.tv_sec);
+
+			sem_post(&sem_cons);
+			delay(period);
+
+		}
+	}
+}
+
+
+
+
 
 
