@@ -10,9 +10,9 @@
 #define _GNU_SOURCE
 
 sem_t sem_cons;				//consumer semaphore
-int status;					//status for function calls
-int update[5];
-float data[5];
+int status;				//status for thread creation
+int update[5];				//use for consumer display check
+float data[5];				//use for pass data from prod to cons
 
 boolean state = F;
 boolean command = F;
