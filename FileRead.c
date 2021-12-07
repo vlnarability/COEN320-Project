@@ -27,7 +27,7 @@ void* file_read(DataBuffer* buffer) {
             }
             j++;
             result = strtok(NULL, ",");
-            if (i == 0) {
+            if (i == 0) {       //start from the first line that contains data
                 state = T;
             }
         }
