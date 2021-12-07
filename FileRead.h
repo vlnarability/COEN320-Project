@@ -1,9 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
-#include <time.h>
-#include <sys/time.h>
-#include <pthread.h>
 #include <sys/types.h>
 #include <fcntl.h>
 #include <unistd.h>
