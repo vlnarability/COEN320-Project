@@ -19,7 +19,7 @@ void* file_read(DataBuffer* buffer) {
         result = strtok(line, ",");
         while (result != NULL) {
             if (i != -1) {
-                buffer->data[j] = atof(result);
+                buffer->data[j] = atof(result);     
             }
             j++;
             result = strtok(NULL, ",");
