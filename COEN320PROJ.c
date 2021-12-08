@@ -200,7 +200,7 @@ void* producerThread(Param* param) {
 	
 	period = param->period;
 	filenum = param->filenum;
-	printf("producer thread %d creadted\n", filenum);
+	printf("producer thread %d created\n", filenum);
 	
 	while (1) {
 		if (command) {
@@ -243,7 +243,7 @@ void* consumerThread() {
 		else {
 			for (itr = 0; itr < 5; itr++) {		//check for all producer thread
 				if (update[itr] == 1) {			//print data if current producer thread has update value equal to 1
-					printf("senser read data: %.1f , from file %d .\n", data[itr], itr + 1);
+					printf("sensor read data: %.1f , from file %d .\n", data[itr], itr + 1);
 					update[itr] = 0;
 				}
 			}
