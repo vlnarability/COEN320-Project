@@ -1,34 +1,31 @@
 #include "FileRead.h" 
 
-#define MAX_LINE_SIZE 9999
-
 void* file_read(DataBuffer* buffer) {
     char file_name[100];
-    int i = -1;			//row, ignore row 1 text
+    int i = 0;			//row
     int j = 0;			//column
-    char line[MAX_LINE_SIZE];
+    char line[10000];	//define max line size
     char* result = NULL;
     
     FILE* myfile;
-
     strcpy(file_name, "320data_3.csv");		//file name in vm tmp
+    myfile = fopen(file_name, "r");			//create file read
     
-    myfile = fopen(file_name, "r");
     if (!myfile) {
-        fprintf(stderr, "cannot open file %s \n", file_name);
+        fprintf(stderr, "cannot open %s for reading\n", file_name);
         exit(-1);
     }
 
-    while (fgets(line, MAX_LINE_SIZE, myfile) != NULL) {
-        result = strtok(line, ",");
+    while (fgets(line, 10000, myfile) != NULL) {
+        result = strtok(line, ",");				//csv file seperate by ","
         while (result != NULL) {
-            if (i != -1) {
-                buffer->data[j] = atof(result);
+            if (i != 0) {
+                buffer->data[j] = atof(result);     
             }
-            j++;
+            j++;					//next column
             result = strtok(NULL, ",");
-            if (i == 0) {       //start from the first line that contains data
-                state = T;
+            if (i == 1) {			//ignore the line of text(1 row)
+                state = T;			
             }
         }
         i++;    		//move to the next row
@@ -36,7 +33,7 @@ void* file_read(DataBuffer* buffer) {
         delay(1000);    //provide data every 1 second
     }
     
-    fclose(myfile);//close file read
+    fclose(myfile);		//close file read
 }
 
 
