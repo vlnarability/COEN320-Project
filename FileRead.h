@@ -20,12 +20,12 @@ typedef struct Param{
 
 struct Param* p[5]; 			//parameters for 5 different producer thread
 
-void* file_read(DataBuffer*);		//read function
+void* file_read(DataBuffer*);		//csv file reader
 
 //void* commandProcessor(int);    	//command Processor
 
 void commandUpdate();			//generate command update
 
-int getline(char*,int);			//get command
+int getline(char*,int);			//getline implementation for command
 
 #endif /*FILEREAD_H_*/
