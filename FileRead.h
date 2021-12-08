@@ -18,11 +18,11 @@ typedef struct Param{
 	int filenum;//1-Fuel_consumption, 2-Engine_speed, 3-Engine_coolant_temperature, 4-Current_Gear, 5-Vehicle_speed
 }Param;
 
-struct Param* p[5]; //an array of 5 Param elements
+struct Param* p[5]; 			//parameters for 5 different producer thread
 
 void* file_read(DataBuffer*);		//read function
 
-//void* commandProcessor(int);    //command Processor
+//void* commandProcessor(int);    	//command Processor
 
 void commandUpdate();			//generate command update
 
