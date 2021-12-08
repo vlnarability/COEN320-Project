@@ -69,7 +69,7 @@ int main(void)
 	status = pthread_create(NULL, NULL, (void*)consumerThread, NULL);			//create consumer thread
 	
 	if (status != 0) {
-			printf("Consumer thread creation failed.");
+			printf("Create consumer thread failed.");
 			exit(-1);
 		}
 		
@@ -78,7 +78,7 @@ int main(void)
 			status = pthread_create(&producer_id[itr], NULL, (void*)producerThread, (void*)p[itr]);
 		
 		if (status != 0) {
-			printf("Producer thread creation failed. Failure Number: %d\n", itr);
+			printf("Create producer thread failed. Failure Number: %d\n", itr);
 			exit(-1);
 		}
 	/*
